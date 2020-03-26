@@ -44,6 +44,7 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     Activity activity;
     List<Item> items;
     int visibleThreshold = 5;
+    public static int loadCountItems = 10;
     int lastVisibleItem;
     int totalItemCount;
 
@@ -59,6 +60,7 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 super.onScrolled(recyclerView, dx, dy);
                 totalItemCount = linearLayoutManager.getItemCount();
                 lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
+                System.out.println("addOnScrollListener last="+Integer.toString(lastVisibleItem+1)+"  -=-Visible"+visibleThreshold+" -=- "+isLoading+" -=-Total="+totalItemCount);
 
                 if (!isLoading && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
 
@@ -107,6 +109,8 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public void setLoaded() {
         isLoading = false;
+        System.out.println("addOnScrollListener Set Loaded");
+
     }
 
     @Override

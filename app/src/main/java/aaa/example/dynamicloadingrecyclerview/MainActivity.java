@@ -37,25 +37,26 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new MyAdapter(recyclerView, this, items);
         recyclerView.setAdapter(adapter);
-        loadSql(0, 10);
+        loadSql(0, MyAdapter.loadCountItems);
         //Set Load more
         adapter.setLoadMore(new ILoadMore() {
             @Override
             public void onLoadMore() {
                 items.add(null);
                 adapter.notifyItemInserted(items.size() - 1);
-                items.remove(items.size() - 1);
+//                items.remove(items.size() - 1);
                 adapter.notifyItemRemoved(items.size());
                 int index = items.size();
-                int end = index + 10;
+                int end = index + MyAdapter.loadCountItems;
                 loadSql(index, end);
+                System.out.println("addOnScrollListener LoadMore");
             }
         });
     }
     private void loadSql(final int indexStart, final int indexEnd) {
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
-                ConfigData.SHOW_KATEGORIA, new Response.Listener<String>() {
+                ConfigData.SHOW_TOVAR, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -92,9 +93,10 @@ public class MainActivity extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> parameters = new HashMap<String, String>();
                 parameters.put("vetka", "1");
-                parameters.put("pokupatel", "59");
+                parameters.put("pokupatel", "63");
                 parameters.put("indexstart", Integer.toString(indexStart));
-                parameters.put("count", Integer.toString(indexEnd));
+                parameters.put("count", Integer.toString(MyAdapter.loadCountItems));
+                parameters.put("poisk", "");
                 System.out.println("Otpravka na server iz tovar id new JO " + parameters.toString());
                 return parameters;
             }
